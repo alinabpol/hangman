@@ -1,7 +1,8 @@
 import random
 print('Welcome to Hangman!')
 
-dictionary = ['apple', 'book', 'travel', 'boat', 'baloon', 'shoes']
+dictionary = ['algorithm', 'variable', 'function', 'loop', 'debugging', 'syntax', 'class', 'recursion', 'inheritance']
+new_list = []
 
 class Word():
 
@@ -15,18 +16,26 @@ class Word():
     # the letter/character, and a boolean representing whether or not it has been guessed
   def split_chosen_word(self):
     chosen_word = random.choice(dictionary)
-    new_list = []
     for letter in chosen_word:
       split_word = {'letter': letter, 'guessed': False}
       new_list.append(split_word)
     print(new_list)
     return new_list
   
-  # ...other methods here... (refer back to JS hangman for ideas -- may not translate exactly, but
-  # should be close enough)
+  def print_word(self):
+    printed_word = ''
+    for letter in new_list:
+      if letter['guessed']:
+        printed_word += [letter['letter']]
+      else:
+        printed_word += '_ '
+    print(printed_word)
+
+
   
 word = Word()
 word.split_chosen_word()
+word.print_word()
 
 
 
