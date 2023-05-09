@@ -5,7 +5,7 @@ print('----- Welcome to Hangman! -------')
 print('*********************************')
 
 dictionary = ['algorithm', 'variable', 'function', 'loop', 'debugging', 'syntax', 'class', 'recursion', 'inheritance']
-new_list = []
+
 
 class Word():
 
@@ -15,7 +15,6 @@ class Word():
     self.identity = "word"
     self.split_word = []
     self.word = random.choice(dictionary)
-    self.printed_word = ' '
     self.guesses = 0
 
   
@@ -23,19 +22,20 @@ class Word():
     # the letter and a boolean representing whether or not it has been guessed
   def split_chosen_word(self):
     for letter in self.word:
-      split_word = {'letter': letter, 'guessed': False}
-      new_list.append(split_word)
-    print(new_list)
-    return new_list
+      split_letter = {'letter': letter, 'guessed': False}
+      self.split_word.append(split_letter)
+    print(self.split_word)
+    return self.split_word
   
   # print undescores for the letters that are 'guessed'= False and actual letters for 'guessed'= True
   def print_word(self):
-    for letter in new_list:
+    printed_word = ' '
+    for letter in self.split_word:
       if letter['guessed']:
-        self.printed_word += [letter['letter']]
+        printed_word += letter['letter']
       else:
-        self.printed_word += '_ '
-    print(f' printed_word in print_word: {self.printed_word}')
+        printed_word += '_ '
+    print(f' printed_word in print_word: {printed_word}')
 
   # swap underscores with letters if the letters have been guessed
   def check_letter(self, input_letter ):
@@ -44,15 +44,16 @@ class Word():
       if letter['letter'] == input_letter:
         letter_guessed = True
         letter['guessed'] = True
-      else:
-        letter_guessed = False
-        letter['guessed'] = False
+        return letter_guessed
+    #   else:
+    #     letter_guessed = False
+    #     letter['guessed'] = False
     return letter_guessed
   
   # loop through all letters in the word and return True if letters have been guessed
   def is_word_guessed(self):
     for letter in self.split_word:
-      if letter['guessed']:
+      if letter['guessed'] == True:
         return True
       else:
         return False
@@ -62,26 +63,46 @@ class Word():
       return ''.join(letter['letter'] for letter in self.split_word)
 
 
+class Game:
 
+  # constructor
+  def __init__(self):
+    self.word = Word()
+    self.guesses = 8
+    self.letters_guessed =[]
 
-  
+  # run methods from word class to split a word to dict and print underscores
+  def start(self):
+    self.word.split_chosen_word()
+    self.word.print_word()
 
-word = Word()
-word.split_chosen_word()
-word.print_word()
+  # cverify wether user input is valid
+  # check if the letter appears in teh word, and if so append it to the letters_guessed list. if user_input is wrond decrement guesses value by 1
+  def play_game(self): 
+    while self.guesses > 0:
+      user_input = input('Enter a letter: ')
+      if len(user_input) != 1:
+        print('Please enter a single letter')
+      elif type(user_input) != str:
+        print('Only letters are allowed')
+      elif user_input.lower() in self.letters_guessed:
+        print('This letter has been already guessed')
+      elif self.word.check_letter(user_input):
+        self.letters_guessed.append(user_input)
+        print("You've found the letter!")
+      else:
+        self.guesses -=1
+        print(f'This is wrong! You have {self.guesses} guesses left!')
+      self.word.print_word()
 
+    if self.word.is_word_guessed:
+        print('***** Congrats, you have guessed the word! ******')
 
-user_input = input("Enter a letter: ")
-letter_guessed = word.check_letter(user_input)
+    if self.guesses == 0:
+      print('Game over!')
+      
 
+game = Game()
+game.start()
+game.play_game()
 
-
-
-# some variables here to prepare the wordlist, initialize things like
-# `remaining_guesses` (start a round with 8), `letters_used`, the `chosen_word` (randomly
-# chosen from a list of words you also declare here perhaps?),
-#and whatever else you might want to keep track of
-
-
-# a loop here that will cause game to play and be exited when user either wins or loses
-# see below for tips on how to structure this loop
