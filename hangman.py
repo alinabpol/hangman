@@ -27,9 +27,8 @@ class Word:
         self.word = random.choice(dictionary)
         self.guesses = 0
 
-        # split the word up into a list of dictionaries with 2 attributes:
-        # the letter and a boolean representing whether or not it has been guessed
-
+    # split the word up into a list of dictionaries with 2 attributes:
+    # the letter and a boolean representing whether or not it has been guessed
     def split_chosen_word(self):
         for letter in self.word:
             split_letter = {"letter": letter, "guessed": False}
@@ -45,7 +44,7 @@ class Word:
                 printed_word += letter["letter"]
             else:
                 printed_word += "_ "
-        print(f" printed_word in print_word: {printed_word}")
+        print(f"Word: {printed_word}")
 
     # swap underscores with letters if the letters have been guessed
     def check_letter(self, input_letter):
@@ -80,27 +79,31 @@ class Game:
     # check if the letter appears in teh word, and if so append it to the letters_guessed list. if user_input is wrond decrement guesses value by 1
     def play_game(self):
         while self.guesses > 0:
-            user_input = input("Enter a letter: ")
+            user_input = input("Enter a letter: ").lower()
             if len(user_input) != 1:
-                print("Please enter a single letter")
+                print("********* Please enter a single letter *********")
             elif user_input.isdigit():
-                print("Only letters are allowed")
+                print("********** Only letters are allowed ************")
             elif user_input.lower() in self.letters_guessed:
-                print("This letter has been already guessed")
+                print("**** This letter has been already guessed! *****")
             elif self.word.check_letter(user_input):
                 self.letters_guessed.append(user_input)
-                print("You've found the letter!")
+                print("----------- You've found the letter! ------------")      
             else:
                 self.guesses -= 1
                 print(f"This is wrong! You have {self.guesses} guesses left!")
             self.word.print_word()
 
             if self.word.is_word_guessed():
+                print("-------------------------------------------------")
                 print("***** Congrats, you have guessed the word! ******")
+                print("-------------------------------------------------")
                 break
 
         if self.guesses == 0:
-            print("Game over!")
+            print("=================================================")
+            print("----------------- Game over! --------------------")
+            print("=================================================")
 
 
 game = Game()
